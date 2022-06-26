@@ -1,3 +1,3 @@
 # Example program SharpDX in WinForms
 
-![box](box.png)
+![box](Box.png)
