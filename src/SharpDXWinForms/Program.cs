@@ -132,11 +132,20 @@ namespace MiniCube
                 new Vector4( 1.0f,  1.0f, -1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f),
                 new Vector4( 1.0f,  1.0f,  1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f),
             });
-        
+
             // Create Constant Buffer
             var contantBuffer = new Buffer(device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
 
 
+            var rasterizerStateDesc = new RasterizerStateDescription()
+            {
+                CullMode = CullMode.Back,
+                FillMode = FillMode.Wireframe,
+                IsDepthClipEnabled = false,
+                IsFrontCounterClockwise = false,
+                IsMultisampleEnabled = false,
+            };
+            var rasterizerState = new RasterizerState(device, rasterizerStateDesc);
 
             // Prepare All the stages
             context.InputAssembler.InputLayout = layout;
@@ -214,6 +223,7 @@ namespace MiniCube
                     // Create the depth buffer view
                     depthView = new DepthStencilView(device, depthBuffer);
 
+                    context.Rasterizer.State = rasterizerState;
                     // Setup targets and viewport for rendering
                     context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                     context.OutputMerger.SetTargets(depthView, renderView);
